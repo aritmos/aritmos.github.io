@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["finders","solvers","structs"]};
+window.SIDEBAR_ITEMS = {"mod":["board","solver","solvers"]};

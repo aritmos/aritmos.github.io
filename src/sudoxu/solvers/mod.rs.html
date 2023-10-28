@@ -5,25 +5,11 @@
 <a href="#5" id="5">5</a>
 <a href="#6" id="6">6</a>
 <a href="#7" id="7">7</a>
-<a href="#8" id="8">8</a>
-<a href="#9" id="9">9</a>
-<a href="#10" id="10">10</a>
-<a href="#11" id="11">11</a>
-<a href="#12" id="12">12</a>
-<a href="#13" id="13">13</a>
-<a href="#14" id="14">14</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! Sudoku solver functionality.
+</pre></div><pre class="rust"><code><span class="doccomment">//! Sudoku solvers, categorized by underlying data structure and function use.
 
-</span><span class="kw">mod </span>simple;
+</span><span class="kw">pub mod </span>btr;
 
-<span class="kw">use </span><span class="kw">crate</span>::structs::grid::Grid;
+<span class="kw">pub mod </span>psr;
 
-<span class="doccomment">/// A sudoku solver.
-</span><span class="kw">pub trait </span>Solver {
-    <span class="doccomment">/// Initialisation taking in a [`Grid`].
-    </span><span class="kw">fn </span>init(grid: Grid) -&gt; <span class="self">Self</span>;
-
-    <span class="doccomment">/// Solve the grid. The returned [`Grid`] is expected to be solved.
-    </span><span class="kw">fn </span>solve(<span class="self">self</span>) -&gt; Grid;
-}
+<span class="kw">pub mod </span>utils;
 </code></pre></div></section></main></body></html>
