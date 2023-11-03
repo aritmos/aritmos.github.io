@@ -72,16 +72,18 @@
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>fmt;
 <span class="kw">mod </span>update;
 
 <span class="kw">use super</span>::{
     cell::Cell,
-    idx::{GridIdx, SectionIdx},
+    idx::GridIdx,
     section::{Section, SectionInfo, SectionKind},
 };
 
-<span class="doccomment">/// The sudoku Grid.
+<span class="attr">#[derive(PartialEq, Eq)]
+</span><span class="doccomment">/// The sudoku Grid.
 ///
 /// # Representation Correctness
 /// It is okay for `Cell`s within the Grid to contain candidates that are not allowed due to

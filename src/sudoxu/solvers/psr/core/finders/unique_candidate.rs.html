@@ -63,6 +63,10 @@
 <a href="#63" id="63">63</a>
 <a href="#64" id="64">64</a>
 <a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::structs;
 <span class="kw">use </span>structs::{
     cell::{CandidateError, Cell},
@@ -75,7 +79,11 @@
 <span class="kw">impl </span>Section {
     <span class="doccomment">/// Finds if the `Cell` at `inner_idx` contains a candidate found in no
     /// other cells within the `Section`.
-    /// # Safety:
+    ///
+    /// # Finder Method
+    /// See the [module level documentation](super) for more information.
+    ///
+    /// # Safety
     /// Does not check that the inner `Cell`s have correct representation.
     /// Incorrect `Cell` representations will lead to undefined behaviour.
     </span><span class="kw">pub fn </span>unique_candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, inner_idx: InnerIdx) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Num&gt;, CandidateError&gt; {

@@ -85,19 +85,23 @@
 <a href="#85" id="85">85</a>
 <a href="#86" id="86">86</a>
 <a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
 </pre></div><pre class="rust"><code><span class="kw">pub mod </span>idxs;
-<span class="kw">pub use </span>idxs::<span class="kw-2">*</span>;
+
+<span class="attr">#[doc(inline)]
+</span><span class="kw">pub use </span>idxs::<span class="kw-2">*</span>;
 <span class="kw">mod </span>fmt;
 
 <span class="kw">use </span>std::ops::{Index, IndexMut};
 
-<span class="doccomment">/// A number `x` guaranteed to satisfy `x &lt; N`.
-/// Used for indexing into arrays without fearing for out-of-bounds indexing.
+<span class="doccomment">/// A generic indexing type used to safely access comptime known-length slices.
+///
+/// Backed by a `usize` `x` guaranteed to satisfy `x &lt; N`.
 </span><span class="attr">#[derive(Clone, Copy, PartialEq)]
 </span><span class="kw">pub struct </span>Idx&lt;<span class="kw">const </span>N: usize&gt;(usize);
 
 <span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; Idx&lt;N&gt; {
-    <span class="doccomment">/// Tries to create an `Idx&lt;N&gt;` from a _uint_.
+    <span class="doccomment">/// Tries to create an `Idx&lt;N&gt;` from a `uint`.
     /// Returns None if the number is too large.
     </span><span class="kw">pub fn </span>new&lt;T: Into&lt;usize&gt;&gt;(t: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>n = t.into();
@@ -118,29 +122,27 @@
     }
 }
 
-<span class="comment">// Idx -&gt; usize
-// For index value computation
-</span><span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; From&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>usize {
-    <span class="kw">fn </span>from(value: Idx&lt;N&gt;) -&gt; <span class="self">Self </span>{
+<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; From&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>usize {
+    <span class="doccomment">/// [`Idx`] -&gt; usize
+    /// Used for index value computations.
+    </span><span class="kw">fn </span>from(value: Idx&lt;N&gt;) -&gt; <span class="self">Self </span>{
         value.<span class="number">0
     </span>}
 }
 
-<span class="doccomment">/// Safe &quot;uint&quot; -&gt; Idx
+<span class="comment">// `x.to_idx()` ergonomics for casting `uint -&gt; Idx`.
+
+</span><span class="doccomment">/// Safe &lt;code&gt;uint -&gt; [Idx]&lt;/code&gt; conversion.
 </span><span class="kw">pub trait </span>TryIntoIdx: Into&lt;usize&gt; {
     <span class="doccomment">/// Tries to cast a uint into an `Idx&lt;N&gt;`. Returns `None` if `self` was too large for `Idx&lt;N&gt;`
     /// (`n &gt;= N`).
     </span><span class="kw">fn </span>try_to_idx&lt;<span class="kw">const </span>N: usize&gt;(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Idx&lt;N&gt;&gt; {
         <span class="kw">let </span>n = <span class="self">self</span>.into();
-        <span class="kw">if </span>n &lt; N {
-            <span class="prelude-val">Some</span>(Idx::&lt;N&gt;(n))
-        } <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
+        (n &lt; N).then_some(Idx::&lt;N&gt;(n))
     }
 }
 
-<span class="doccomment">/// uint -&gt; Idx
+<span class="doccomment">/// Unsafe &lt;code&gt;uint -&gt; [Idx]&lt;/code&gt; conversion.
 </span><span class="kw">pub trait </span>IntoIdx: Into&lt;usize&gt; {
     <span class="doccomment">/// Casts a uint into an `Idx&lt;N&gt;`, without performing the bounds check.
     /// # Safety

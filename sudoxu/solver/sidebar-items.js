@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["Solver"]};
+window.SIDEBAR_ITEMS = {"trait":["LoggingSolver","Solver","StepLoggingSolver","StepSolver"]};

@@ -53,7 +53,7 @@
     /// # Safety
     /// Caller guarantees that the cell only has a single candidate,
     /// such that setting the known bit results in a valid representation.
-    </span><span class="kw">pub unsafe fn </span>set_known(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+    </span><span class="kw">pub unsafe fn </span>set_known_bit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.<span class="number">0 </span>|= <span class="number">1</span>;
     }
 

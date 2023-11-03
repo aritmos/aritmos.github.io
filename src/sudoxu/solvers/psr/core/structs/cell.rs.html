@@ -152,6 +152,46 @@
 <a href="#152" id="152">152</a>
 <a href="#153" id="153">153</a>
 <a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::num::Num;
 
 <span class="kw">mod </span>fmt;
@@ -160,35 +200,48 @@
 <span class="doccomment">/// A cell within the grid.
 /// Holds information about what candidates the cell has, and if the value of the cell is known.
 ///
-/// [`Cell`] is a direct wrapper of a `u16`. In general, we think of [`Cell`]s and
-/// `u16`s as being the same thing. That being said, not all operations on `u16`s are valid
-/// or safe in the context of a [`Cell`]&#39;s representation. For this reason [`Cell`]
-/// does not implement [`Deref&lt;u16&gt;`](std::ops::Deref), nor is its inner `u16` marked public.
-/// In many occasions it is still necessary to access the underyling `u16`. For this reason
-/// [`Cell`] contains an explicit [`to_u16`](Cell::to_u16) method for casting.
+/// [`Cell`]s are wrappers for `u16`s.
 ///
-/// # `u16` Representation
+/// In general, this wrapping is mostly transparent, and in many cases [`Cell`]s can be almost
+/// interpreted as type aliases for `u16`s.
+/// That being said, not all operations on `u16`s are valid or safe in the context of a [`Cell`]&#39;s
+/// representation. For this reason [`Cell`] does not implement [`Deref&lt;u16&gt;`](std::ops::Deref),
+/// nor is its inner `u16` marked public. In many occasions it is still necessary to access the
+/// underyling `u16`. For this reason [`Cell`] contains an explicit [`to_u16`](Cell::to_u16)
+/// method for casting.
+///
+/// # Internal Representation
+///
 /// ```txt
 /// 0b  000000  0 0 0  0 0 0  0 0 0  0
 ///     ^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^
 ///     |       |                    known bit
 ///     |       candidates
 ///     |      (9 8 7  6 5 4  3 2 1)
-///     banned bits
+///     &quot;banned&quot; bits
 /// ```
+///
+/// Because of this representation, for visual clarity the unusual byte grouping of
+/// &quot;`0b000000_000_000_000_0`&quot; is commonly used for `u16`s relating to `Cells`.
+///
+/// Errors relating to `Cell` representations (see below) are contained in the [`CandidateError`] enum.
+///
 /// #### Known Bit
 /// The first bit is the &quot;known bit&quot;.
-/// When it is set, the cell is assumed to have a known number (the cell has been filled out), as opposed to multiple
-/// candidates (having pencilmarks). This means there must only be a single &quot;candidate bit&quot; set.
+/// When it is set, the cell is assumed to have a known number (the cell has been filled out),
+/// as opposed to multiple candidates (having pencilmarks).
+/// This means there must only be a single &quot;candidate bit&quot; set.
 /// ```
 /// // Valid u16 representation of a cell with value 9.
-/// let cell_inner = 0b000000_100_000_000_1
+/// assert!(Cell::new(0b000000_100_000_000_1).is_ok());
+///
 /// // Invalid u16 representation. Known bit is set but candidate bits for 5 and 6 are set.
 /// // This would represent a cell with a known value that is both 5 and 6.
-/// let cell_inner = 0b000000_000_110_000_1
+/// assert!(Cell::new(0b000000_000_110_000_1).is_err());
+///
 /// // Invalid u16 representation. Known bit is set but there are no set candidate bits.
 /// // This would represent a cell with a known value, but no known value is set.
-/// let cell_inner = 0b000000_000_000_000_1
+/// assert!(Cell::new(0b000000_000_000_000_1).is_err());
 /// ```
 /// #### Candidates
 /// The following 9 bits are the &quot;candidate&quot; bits, these represent the possible candidate numbers
@@ -198,43 +251,69 @@
 /// The final 6 bits are unused in the current implementation.
 /// If they are not all set to zero, then the `Cell`s representation is deemed invalid.
 ///
+/// ```
+/// // Valid u16 representation of a cell with candidates 1, 2, and 3.
+/// assert!(Cell::new(0b000000_000_000_111_0).is_ok());
+///
+/// // Invalid u16 representation of a cell. Banned bits are not all zero.
+/// assert!(Cell::new(0b001100_000_000_111_0).is_err());
+/// ```
+///
 /// # Safety
 /// TODO
 ///
 /// # Nomenclature
 /// We refer to a cell holding a known number as having a _value_ of said number,
-/// while a cell not holding a known number as having _candidates_.
-/// - `Cell(0b000000_100_000_000_1)` has &quot;value&quot; 9.
-/// - `Cell(0b000000_000_000_111_0)` has &quot;candidates&quot; 1, 2, and 3.
+/// while a cell not holding a known number as having _candidates_:
+/// ```
+/// Cell(0b000000_100_000_000_1); // has &quot;value&quot; 9.
+/// Cell(0b000000_000_000_111_0); // has &quot;candidates&quot; 1, 2, and 3.
+/// ```
 </span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Cell(u16);
 
 <span class="doccomment">/// Errors relating to a Cell&#39;s candidates.
 </span><span class="attr">#[derive(Debug, PartialEq, Copy, Clone)]
 </span><span class="kw">pub enum </span>CandidateError {
-    <span class="doccomment">/// Error when parsing a [Cell] from a [String].
-    </span>ParseError,
     <span class="doccomment">/// Bits set within the banned sector.
-    /// `Cell &gt;= 1024 ( = 2^10 )`
+    /// ```
+    /// let cell = unsafe{ Cell::new_unchecked(0b000011_000_001_000_1) };
+    /// assert!(cell.to_u16() &gt;= 1024); // 1024 = 2^10
+    /// ```
     </span>BannedBits,
     <span class="doccomment">/// Known bit is set but no candidates are set.
-    /// `Cell == 1`
+    ///
+    /// ```
+    /// let cell = unsafe{ Cell::new_unchecked(0b000000_000_000_000_1) };
+    /// assert!(cell.to_u16() == 1);
+    /// ```
     </span>KnownNoNum,
     <span class="doccomment">/// Known bit is set but multiple candidates are also set.
-    /// `Cell % 2 == 1 &amp;&amp; !(Cell - 1).is_power_of_two()`
+    /// ```
+    /// let cell = unsafe{ Cell::new_unchecked(0b000000_111_000_000_1) };
+    /// assert!(cell.to_u16() % 2 == 1 &amp;&amp; !(cell.to_u16() &amp; 0b000000_111_111_111_0 - 1).is_power_of_two());
+    /// ```
     </span>KnownMultipleNum,
-    <span class="doccomment">/// Cell contains no candidates.
-    /// `Cell == 0`
+    <span class="doccomment">/// Cell contains no candidates/value.
+    ///
+    /// ```
+    /// let cell = unsafe{ Cell::new_unchecked(0b000000_000_000_000_0) };
+    /// assert!(cell.to_u16() &amp; 0b000000_111_111_111_0 == 0);
+    /// ```
     </span>NoCandidates,
-    <span class="doccomment">/// Cell has multiple unique candidates within its sections.
-    /// See [finders::unique_candidate](crate::finders::unique_candidate).
+    <span class="doccomment">/// Cell has multiple unique candidates within its [Sections](super::section::Section).
+    /// This is not an error in the representation of the [Cell], but an error in the state of the
+    /// [Grid](super::grid::Grid).
+    ///
+    /// See [finders::unique_candidate](super::super::finders::unique_candidate) for more
+    /// information.
     </span>MultipleUniqueCandidates,
 }
 
 <span class="kw">impl </span>Default <span class="kw">for </span>Cell {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(<span class="number">0b0000001111111110</span>)
-        <span class="comment">//           987654321
+        <span class="self">Self</span>(<span class="number">0b000000_111_111_111_0</span>)
+        <span class="comment">//            987 654 321
     </span>}
 }
 
@@ -261,7 +340,7 @@
     }
 
     <span class="doccomment">/// Creates a new [`Cell`] from an inner `u16`. Returns a [`CandidateError`] if the `u16`&#39;s
-    /// does not follow the [allowed representation](Cell#u16-representation).
+    /// does not follow the [allowed representation](Cell#internal-representation).
     </span><span class="kw">pub fn </span>new(n: u16) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, CandidateError&gt; {
         <span class="kw">let </span>cell = <span class="kw">unsafe </span>{ <span class="self">Self</span>::new_unchecked(n) };
         cell.check().map(|<span class="kw">_</span>| cell)
@@ -270,7 +349,8 @@
     <span class="doccomment">/// Creates a new `Cell`, which can either contain multiple candidates or be known.
     /// Does no checking to verify the representation of the `u16` matches that of a `Cell`
     /// # Safety
-    /// The caller must ensure that the content of the `u16` is a valid representation of a `Cell`.
+    /// The caller must ensure that the content of the `u16` is a
+    /// [valid representation](Cell#internal-representation) of a `Cell`.
     </span><span class="attr">#[inline(always)]
     </span><span class="kw">pub unsafe fn </span>new_unchecked(n: u16) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>(n)
