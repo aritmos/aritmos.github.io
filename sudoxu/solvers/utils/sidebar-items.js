@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["boards"]};
+window.SIDEBAR_ITEMS = {"mod":["boards","time"]};

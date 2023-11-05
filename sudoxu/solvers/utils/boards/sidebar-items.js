@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["SUDOKU_1_UNSOLVED_FMT_STR","SUDOKU_1_UNSOLVED_STR"]};
+window.SIDEBAR_ITEMS = {"constant":["B1_U_FMT_STR","B1_U_STR","B2_U_STR"]};

@@ -40,7 +40,7 @@
     <span class="attr">#[test]
     </span><span class="kw">fn </span>empty_board() {
         <span class="kw">let </span>s = std::string::String::from_utf8(<span class="macro">vec!</span>[<span class="string">b&#39;0&#39;</span>; <span class="number">81</span>]).unwrap();
-        <span class="kw">let </span>b = Board::try_from(s).unwrap();
+        <span class="kw">let </span>b = Board::try_from(s.as_str()).unwrap();
         <span class="macro">assert_eq!</span>(Grid::from(b), Grid::default());
     }
 }

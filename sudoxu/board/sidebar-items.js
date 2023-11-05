@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["Board"]};
+window.SIDEBAR_ITEMS = {"enum":["BoardError"],"struct":["Board"]};

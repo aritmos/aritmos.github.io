@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["LoggingSolver","Solver","StepLoggingSolver","StepSolver"]};
+window.SIDEBAR_ITEMS = {"fn":["solve_board"],"trait":["LoggingSolver","Solver","StepLoggingSolver","StepSolver"]};

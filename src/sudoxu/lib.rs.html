@@ -18,6 +18,14 @@
 <a href="#18" id="18">18</a>
 <a href="#19" id="19">19</a>
 <a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+<a href="#28" id="28">28</a>
 </pre></div><pre class="rust"><code><span class="attr">#![warn(missing_docs)]
 #![allow(unused)]
 #![allow(clippy::unusual_byte_groupings)]
@@ -38,4 +46,12 @@
 </span><span class="kw">pub mod </span>board;
 <span class="kw">pub mod </span>solver;
 <span class="kw">pub mod </span>solvers;
+
+<span class="doccomment">/// Prelude module, used for easy access to solvers and functions.
+</span><span class="attr">#[macro_export]
+</span><span class="kw">pub mod </span>prelude {
+    <span class="kw">pub use </span><span class="kw">super</span>::solver::solve_board;
+    <span class="kw">pub use </span><span class="kw">super</span>::solvers::utils::{boards::<span class="kw-2">*</span>, time::time};
+    <span class="kw">pub use </span><span class="kw">super</span>::solvers::<span class="kw-2">*</span>;
+}
 </code></pre></div></section></main></body></html>
