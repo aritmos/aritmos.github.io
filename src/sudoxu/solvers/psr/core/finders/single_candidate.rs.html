@@ -54,14 +54,20 @@
 <a href="#54" id="54">54</a>
 <a href="#55" id="55">55</a>
 <a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::structs;
-<span class="kw">use </span>structs::{cell::Cell, num::Num};
+<span class="kw">use </span>structs::{
+    cell::{Cell, ALL_CANDIDATES},
+    num::Num,
+};
 
 <span class="kw">impl </span>Cell {
     <span class="doccomment">/// Checks if a [`Cell`] is not known and only contains a single candidate.
     ///
     /// # Finder Method
-    /// See the [module level documentation](super) for more information.
+    /// See the [core module&#39;s documentation](super::super#finders) for more information.
     ///
     /// # Safety
     /// Does not check that the underyling `u16` representation is correct.
@@ -71,7 +77,7 @@
     /// and [`CandidateError::BannedBits`](super::super::structs::cell::CandidateError::BannedBits).
     </span><span class="kw">pub fn </span>single_candidate(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Num&gt; {
         <span class="kw">let </span>is_single_candidate =
-            !<span class="self">self</span>.is_known() &amp;&amp; (<span class="self">self</span>.to_u16() &amp; <span class="number">0b000000_111_111_111_0</span>).count_ones() == <span class="number">1</span>;
+            !<span class="self">self</span>.is_known() &amp;&amp; (<span class="self">self</span>.to_u16() &amp; ALL_CANDIDATES).count_ones() == <span class="number">1</span>;
         is_single_candidate.then_some(<span class="kw">unsafe </span>{ Num::new_unchecked(<span class="self">self</span>.to_u16().ilog2() <span class="kw">as </span>u8) })
     }
 }
@@ -83,20 +89,20 @@
     <span class="attr">#[test]
     </span><span class="comment">// Standard usecase
     </span><span class="kw">fn </span>basic() {
-        <span class="kw">let </span>cell = Cell::new(<span class="number">0b000000_001_001_001_0</span>).unwrap();
+        <span class="kw">let </span>cell = Cell::new(<span class="number">0b001_001_001_0</span>).unwrap();
         <span class="macro">assert!</span>(cell.single_candidate().is_none());
 
-        <span class="kw">let </span>cell = Cell::new(<span class="number">0b000000_000_010_000_0</span>).unwrap();
+        <span class="kw">let </span>cell = Cell::new(<span class="number">0b000_010_000_0</span>).unwrap();
         <span class="macro">assert_eq!</span>(cell.single_candidate(), <span class="prelude-val">Some</span>(Num::new(<span class="number">5</span>).unwrap()));
     }
 
     <span class="attr">#[test]
     </span><span class="comment">// Reject known cells, even in banned representations
     </span><span class="kw">fn </span>discard_known() {
-        <span class="kw">let </span>cell = Cell::new(<span class="number">0b000000_000_010_000_1</span>).unwrap();
+        <span class="kw">let </span>cell = Cell::new(<span class="number">0b000_010_000_1</span>).unwrap();
         <span class="macro">assert!</span>(cell.single_candidate().is_none());
 
-        <span class="kw">let </span>cell = <span class="kw">unsafe </span>{ Cell::new_unchecked(<span class="number">0b000000_000_111_000_1</span>) };
+        <span class="kw">let </span>cell = <span class="kw">unsafe </span>{ Cell::new_unchecked(<span class="number">0b000_111_000_1</span>) };
         <span class="macro">assert!</span>(cell.single_candidate().is_none());
     }
 

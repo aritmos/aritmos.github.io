@@ -41,35 +41,26 @@
 <a href="#41" id="41">41</a>
 <a href="#42" id="42">42</a>
 <a href="#43" id="43">43</a>
-</pre></div><pre class="rust"><code><span class="doccomment">/// A known number within a `Cell`, satisfying `1 &lt;= N &lt;= 9`.
-</span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+<a href="#44" id="44">44</a>
+<a href="#45" id="45">45</a>
+</pre></div><pre class="rust"><code><span class="attr">#![allow(unused)]
+
+</span><span class="kw">use </span><span class="kw">crate</span>::structs::<span class="kw-2">*</span>;
+<span class="kw">use </span>std::mem::transmute;
+
+<span class="doccomment">/// The classical form of a known number in a `Cell`.
+/// A number `1 &lt;= N &lt;= 9`.
+</span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Num(u8);
 
 <span class="attr">#[derive(Debug)]
-</span><span class="doccomment">/// [`Num`]-related errors.
 </span><span class="kw">pub enum </span>NumErr {
-    <span class="doccomment">/// `n == 0`
-    </span>Zero,
-    <span class="doccomment">/// `n &gt; 9`
-    </span>TooBig,
+    Zero,
+    TooBig,
 }
-
-<span class="macro">macro_rules! </span>impl_from_num {
-    (<span class="macro-nonterminal">$t</span>: ty) =&gt; {
-        <span class="kw">impl </span>From&lt;Num&gt; <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
-            <span class="kw">fn </span>from(n: Num) -&gt; <span class="self">Self </span>{
-                n.<span class="number">0 </span><span class="kw">as </span><span class="macro-nonterminal">$t
-            </span>}
-        }
-    };
-}
-
-<span class="macro">impl_from_num!</span>(u16);
 
 <span class="kw">impl </span>Num {
-    <span class="doccomment">/// Creates a [`Num`] from a `u8`.
-    /// Returns an error if `n` is not in `1..=9`.
-    </span><span class="kw">pub fn </span>new(n: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, NumErr&gt; {
+    <span class="kw">pub fn </span>new(n: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, NumErr&gt; {
         <span class="kw">match </span>n {
             <span class="number">0 </span>=&gt; <span class="prelude-val">Err</span>(NumErr::Zero),
             <span class="number">1</span>..=<span class="number">9 </span>=&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>(n)),
@@ -77,11 +68,24 @@
         }
     }
 
-    <span class="doccomment">/// Creates a [`Num`] from a `u8`. Does not apply the bounds check.
-    /// # Safety
-    /// The caller must ensure that `1 &lt;= n &lt;= 9`.
+    <span class="doccomment">/// # Safety
+    /// The caller must ensure that the `u8` passed in satisfies `1 &lt;= n &lt;= 9`.
     </span><span class="kw">pub unsafe fn </span>new_unchecked(n: u8) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>(n)
     }
 }
+
+<span class="macro">macro_rules! </span>impl_from_num {
+    (<span class="macro-nonterminal">$t</span>: ty) =&gt; {
+        <span class="kw">impl </span>From&lt;Num&gt; <span class="kw">for </span><span class="macro-nonterminal">$t </span>{
+            <span class="kw">fn </span>from(value: Num) -&gt; <span class="self">Self </span>{
+                value.<span class="number">0 </span><span class="kw">as </span><span class="macro-nonterminal">$t
+            </span>}
+        }
+    };
+}
+
+<span class="macro">impl_from_num!</span>(u8);
+<span class="macro">impl_from_num!</span>(u16);
+<span class="macro">impl_from_num!</span>(i16);
 </code></pre></div></section></main></body></html>

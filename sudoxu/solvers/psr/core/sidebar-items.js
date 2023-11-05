@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["filters","finders","structs"]};
+window.SIDEBAR_ITEMS = {"mod":["area","cell","filter","grid","idx","num","section"]};

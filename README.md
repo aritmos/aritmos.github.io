@@ -1,4 +1,4 @@
-## Documentation for [`sudoxu`](https://github.com/aritmos/sudoxu).
+## Documentation for [`sudoxu`](https://github.com/aritmos/sudoxu)
 
 Currently hosted in my GitHub pages [here](https://aritmos.github.io/sudoxu-docs).
 

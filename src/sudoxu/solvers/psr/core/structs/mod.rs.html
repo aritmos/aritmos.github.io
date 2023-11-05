@@ -12,6 +12,11 @@
 <a href="#12" id="12">12</a>
 <a href="#13" id="13">13</a>
 <a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
 </pre></div><pre class="rust"><code><span class="doccomment">/// The cells in a sudoku grid.
 </span><span class="kw">pub mod </span>cell;
 
@@ -21,9 +26,14 @@
 <span class="doccomment">/// Safe indexing into comptime known arrays.
 </span><span class="kw">pub mod </span>idx;
 
-<span class="doccomment">/// Representation of a known number within a [Cell](cell::Cell): `1 &lt;= N &lt;= 9`.
+<span class="doccomment">/// Representation of a known number within a [`Cell`](cell::Cell): `1 &lt;= N &lt;= 9`.
 </span><span class="kw">pub mod </span>num;
 
 <span class="doccomment">/// A row, column, or box within the grid.
 </span><span class="kw">pub mod </span>section;
+
+<span class="doccomment">/// Filter type, used to remove candidates from [`Cells`](cell::Cell).
+</span><span class="kw">pub mod </span>filter;
+
+<span class="kw">pub mod </span>area;
 </code></pre></div></section></main></body></html>

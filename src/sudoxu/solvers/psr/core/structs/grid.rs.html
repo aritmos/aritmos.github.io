@@ -73,22 +73,47 @@
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
 </pre></div><pre class="rust"><code><span class="kw">mod </span>fmt;
-<span class="kw">mod </span>update;
+<span class="attr">#[doc(hidden)]
+</span><span class="kw">mod </span>update;
+<span class="attr">#[doc(inline)]
+</span><span class="kw">pub use </span>update::<span class="kw-2">*</span>;
 
 <span class="kw">use super</span>::{
+    area::FoldedArea,
     cell::Cell,
-    idx::GridIdx,
+    idx::{AreaIdx, GridIdx},
     section::{Section, SectionInfo, SectionKind},
 };
 
 <span class="attr">#[derive(PartialEq, Eq)]
-</span><span class="doccomment">/// The sudoku Grid.
+</span><span class="doccomment">/// The sudoku board for PSR solvers.
 ///
-/// # Representation Correctness
-/// It is okay for `Cell`s within the Grid to contain candidates that are not allowed due to
-/// neighboring known cells. This just means that some Cell&#39;s might have not been updated upon
-/// finding a value for a cell.
+/// #### Nomenclature
+/// A [`Cell`](Cell)&#39;s &quot;neighbours&quot; are all other [`Cells`](Cell) in the grid that share a [`Section`]
+/// with the given [`Cell`].
+///
+/// #### Grid Correctness
+/// At any given time in a PSR Solver&#39;s computation, [`Cells`](Cell) within the Grid may contain
+/// candidates that are &quot;not allowed&quot; due to neighboring known cells. This is a valid representation.
+/// In these cases said [`Cells`](Cell) might have not been &quot;updated&quot; upon finding a value for a cell.
+/// Care must be taken to promptly update [`Cells`](Cell) every time candidates are filtered or
+/// values are found.
 </span><span class="kw">pub struct </span>Grid(<span class="kw">pub</span>(<span class="kw">super</span>) [Cell; <span class="number">81</span>]);
 
 <span class="attr">#[derive(Debug)]
@@ -108,26 +133,26 @@
 <span class="kw">impl </span>Grid {
     <span class="doccomment">/// Get a copy of the [`Cell`] the given index.
     </span><span class="attr">#[inline(always)]
-    </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: GridIdx) -&gt; Cell {
+    </span><span class="kw">pub fn </span>get_cell(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: GridIdx) -&gt; Cell {
         <span class="self">self</span>.<span class="number">0</span>[idx]
     }
 
     <span class="doccomment">/// Get a mutable reference to the [`Cell`] at the given index.
-    </span><span class="kw">pub fn </span>get_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, idx: GridIdx) -&gt; <span class="kw-2">&amp;mut </span>Cell {
+    </span><span class="kw">pub fn </span>get_cell_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, idx: GridIdx) -&gt; <span class="kw-2">&amp;mut </span>Cell {
         <span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>[idx]
     }
 }
 
 <span class="comment">// Section Related
 </span><span class="kw">impl </span>Grid {
-    <span class="doccomment">/// Returns (a copy of) the specified `Section`.
-    </span><span class="kw">pub fn </span>section(<span class="kw-2">&amp;</span><span class="self">self</span>, section_info: SectionInfo) -&gt; Section {
+    <span class="doccomment">/// Returns (a copy of) the specified [`Section`].
+    </span><span class="kw">pub fn </span>get_section(<span class="kw-2">&amp;</span><span class="self">self</span>, section_info: SectionInfo) -&gt; Section {
         <span class="kw">use </span>std::mem::MaybeUninit;
         <span class="kw">let </span>grid_idxs = section_info.grid_idxs();
         <span class="kw">let </span><span class="kw-2">mut </span>uninit_cells: [MaybeUninit&lt;Cell&gt;; <span class="number">9</span>] =
             <span class="kw">unsafe </span>{ MaybeUninit::uninit().assume_init() };
         <span class="kw">for </span>(cell, grid_idx) <span class="kw">in </span>uninit_cells.iter_mut().zip(grid_idxs) {
-            <span class="kw-2">*</span>cell = MaybeUninit::new(<span class="self">self</span>.get(grid_idx));
+            <span class="kw-2">*</span>cell = MaybeUninit::new(<span class="self">self</span>.get_cell(grid_idx));
         }
 
         <span class="kw">let </span>cells: [Cell; <span class="number">9</span>] = <span class="kw">unsafe </span>{ std::mem::transmute(uninit_cells) };
@@ -135,8 +160,13 @@
         Section::new(section_info, cells)
     }
 
-    <span class="doccomment">/// Returns (copies of) the `Section`s of the `Cell` at the given `GridIdx`.
-    </span><span class="kw">pub fn </span>sections(<span class="kw-2">&amp;</span><span class="self">self</span>, grid_idx: GridIdx) -&gt; [Section; <span class="number">3</span>] {
+    <span class="doccomment">/// Returns (a copy of) the specified [`FoldedArea`].
+    </span><span class="comment">// pub fn folded_area(&amp;self, area_idx: FoldedArea) -&gt; FoldedArea {
+    //     todo!()
+    // }
+
+    </span><span class="doccomment">/// Returns (copies of) the [`Sections`](Section) of the [`Cell`] at the given [`GridIdx`].
+    </span><span class="kw">pub fn </span>get_sections(<span class="kw-2">&amp;</span><span class="self">self</span>, grid_idx: GridIdx) -&gt; [Section; <span class="number">3</span>] {
         <span class="kw">let </span>section_idxs = grid_idx.section_idxs();
 
         <span class="comment">// a functional approach here is actually messier; so we stick to declarative
@@ -145,7 +175,7 @@
         <span class="kw">let </span>col_info = SectionInfo::new(Column, section_idxs[<span class="number">1</span>]);
         <span class="kw">let </span>box_info = SectionInfo::new(Box, section_idxs[<span class="number">2</span>]);
 
-        [row_info, col_info, box_info].map(|sec_info| <span class="self">self</span>.section(sec_info))
+        [row_info, col_info, box_info].map(|sec_info| <span class="self">self</span>.get_section(sec_info))
     }
 }
 </code></pre></div></section></main></body></html>

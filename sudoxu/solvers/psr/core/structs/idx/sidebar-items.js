@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["idxs"],"struct":["Idx"],"trait":["IntoIdx","TryIntoIdx"],"type":["GridIdx","InnerIdx","SectionIdx"]};

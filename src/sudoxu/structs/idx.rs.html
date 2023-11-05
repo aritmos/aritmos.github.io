@@ -85,91 +85,91 @@
 <a href="#85" id="85">85</a>
 <a href="#86" id="86">86</a>
 <a href="#87" id="87">87</a>
-</pre></div><pre class="rust"><code><span class="kw">pub mod </span>idxs;
-<span class="kw">pub use </span>idxs::<span class="kw-2">*</span>;
-<span class="kw">mod </span>fmt;
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::structs::<span class="kw-2">*</span>;
 
-<span class="kw">use </span>std::ops::{Index, IndexMut};
+<span class="attr">#[derive(Clone, Copy)]
+</span><span class="kw">pub struct </span>Idx&lt;<span class="kw">const </span>N: u8&gt;(u8);
 
-<span class="doccomment">/// A number `x` guaranteed to satisfy `x &lt; N`.
-/// Used for indexing into arrays without fearing for out-of-bounds indexing.
-</span><span class="attr">#[derive(Clone, Copy, PartialEq)]
-</span><span class="kw">pub struct </span>Idx&lt;<span class="kw">const </span>N: usize&gt;(usize);
+<span class="attr">#[derive(Debug)]
+</span><span class="kw">pub enum </span>IdxErr {
+    TooBig,
+}
 
-<span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; Idx&lt;N&gt; {
-    <span class="doccomment">/// Tries to create an `Idx&lt;N&gt;` from a _uint_.
-    /// Returns None if the number is too large.
-    </span><span class="kw">pub fn </span>new&lt;T: Into&lt;usize&gt;&gt;(t: T) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span>n = t.into();
+<span class="kw">impl</span>&lt;<span class="kw">const </span>N: u8&gt; Idx&lt;N&gt; {
+    <span class="doccomment">/// Create an Idx&lt;N&gt; from a `u8`
+    </span><span class="kw">pub fn </span>new(n: u8) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, IdxErr&gt; {
         <span class="kw">if </span>n &lt; N {
-            <span class="prelude-val">Some</span>(<span class="self">Self</span>(n))
+            <span class="prelude-val">Ok</span>(<span class="self">Self</span>(n))
         } <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
+            <span class="prelude-val">Err</span>(IdxErr::TooBig)
+        }
     }
 
-    <span class="doccomment">/// Create an `Idx&lt;N&gt;` from a `usize`.
-    ///
-    /// Does not do the bounds check.
-    /// # Safety
-    /// Caller guarantees that `t.into() &lt; N`.
-    </span><span class="kw">pub unsafe fn </span>new_unchecked&lt;T: Into&lt;usize&gt;&gt;(t: T) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(t.into())
+    <span class="doccomment">/// # Safety
+    /// The caller must ensure that the `u8` passed in is less than `N`
+    </span><span class="kw">pub unsafe fn </span>new_unchecked(value: u8) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(value)
     }
 }
 
-<span class="comment">// Idx -&gt; usize
-// For index value computation
-</span><span class="kw">impl</span>&lt;<span class="kw">const </span>N: usize&gt; From&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>usize {
+<span class="comment">// For index value computation
+</span><span class="kw">impl</span>&lt;<span class="kw">const </span>N: u8&gt; From&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>u8 {
     <span class="kw">fn </span>from(value: Idx&lt;N&gt;) -&gt; <span class="self">Self </span>{
         value.<span class="number">0
     </span>}
 }
 
-<span class="doccomment">/// Safe &quot;uint&quot; -&gt; Idx
-</span><span class="kw">pub trait </span>TryIntoIdx: Into&lt;usize&gt; {
-    <span class="doccomment">/// Tries to cast a uint into an `Idx&lt;N&gt;`. Returns `None` if `self` was too large for `Idx&lt;N&gt;`
-    /// (`n &gt;= N`).
-    </span><span class="kw">fn </span>try_to_idx&lt;<span class="kw">const </span>N: usize&gt;(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Idx&lt;N&gt;&gt; {
-        <span class="kw">let </span>n = <span class="self">self</span>.into();
-        <span class="kw">if </span>n &lt; N {
-            <span class="prelude-val">Some</span>(Idx::&lt;N&gt;(n))
-        } <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
-    }
-}
-
-<span class="doccomment">/// uint -&gt; Idx
-</span><span class="kw">pub trait </span>IntoIdx: Into&lt;usize&gt; {
-    <span class="doccomment">/// Casts a uint into an `Idx&lt;N&gt;`, without performing the bounds check.
-    /// # Safety
-    /// The caller ensures that `self &lt; N`.
-    </span><span class="kw">unsafe fn </span>to_idx&lt;<span class="kw">const </span>N: usize&gt;(<span class="self">self</span>) -&gt; Idx&lt;N&gt; {
-        Idx::&lt;N&gt;(<span class="self">self</span>.into())
-    }
-}
-
-<span class="kw">impl </span>IntoIdx <span class="kw">for </span>usize {}
-<span class="kw">impl </span>TryIntoIdx <span class="kw">for </span>usize {}
-
 <span class="comment">// For indexing into slices without the SliceIndex trait for now
-// impl&lt;const N: u8&gt; From&lt;Idx&lt;N&gt;&gt; for usize {
-//     fn from(value: Idx&lt;N&gt;) -&gt; Self {
-//         value.0 as usize
-//     }
-// }
-</span><span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: usize&gt; Index&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>[T; N] {
+</span><span class="kw">impl</span>&lt;<span class="kw">const </span>N: u8&gt; From&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>usize {
+    <span class="kw">fn </span>from(value: Idx&lt;N&gt;) -&gt; <span class="self">Self </span>{
+        value.<span class="number">0 </span><span class="kw">as </span>usize
+    }
+}
+
+<span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: u8&gt; std::ops::Index&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>[T; N <span class="kw">as </span>usize] {
     <span class="kw">type </span>Output = T;
 
     <span class="kw">fn </span>index(<span class="kw-2">&amp;</span><span class="self">self</span>, index: Idx&lt;N&gt;) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Output {
-        <span class="kw">unsafe </span>{ <span class="self">self</span>.get_unchecked(index.<span class="number">0</span>) }
+        <span class="kw">unsafe </span>{ <span class="self">self</span>.get_unchecked(index.<span class="number">0 </span><span class="kw">as </span>usize) }
     }
 }
 
-<span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: usize&gt; IndexMut&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>[T; N] {
+<span class="kw">impl</span>&lt;T, <span class="kw">const </span>N: u8&gt; std::ops::IndexMut&lt;Idx&lt;N&gt;&gt; <span class="kw">for </span>[T; N <span class="kw">as </span>usize] {
     <span class="kw">fn </span>index_mut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, index: Idx&lt;N&gt;) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self</span>::Output {
-        <span class="kw">unsafe </span>{ <span class="self">self</span>.get_unchecked_mut(index.<span class="number">0</span>) }
+        <span class="kw">unsafe </span>{ <span class="self">self</span>.get_unchecked_mut(index.<span class="number">0 </span><span class="kw">as </span>usize) }
     }
 }
+
+<span class="comment">// let idx: u8 = idx.into();
+// let row_idx = idx / 9;
+// let col_idx = idx % 9;
+// let square_idx = 3 * (row_idx / 3) + (col_idx / 3);
+// let inner_square_idx = { 3 * (row_idx % 3) + (col_idx % 3) };
+
+</span><span class="kw">impl </span>GridIdx {
+    <span class="attr">#[inline(always)]
+    </span><span class="kw">pub fn </span>row_idx(<span class="self">self</span>) -&gt; SectionIdx {
+        <span class="kw">let </span>row_idx_u8 = u8::from(<span class="self">self</span>) / <span class="number">9</span>;
+        <span class="kw">unsafe </span>{ SectionIdx::new_unchecked(row_idx_u8) }
+    }
+
+    <span class="attr">#[inline(always)]
+    </span><span class="kw">pub fn </span>inner_row_idx(<span class="self">self</span>) -&gt; InnerIdx {
+        <span class="self">self</span>.col_idx()
+    }
+
+    <span class="attr">#[inline(always)]
+    </span><span class="kw">pub fn </span>col_idx(<span class="self">self</span>) -&gt; SectionIdx {
+        <span class="kw">let </span>col_idx_u8 = u8::from(<span class="self">self</span>) % <span class="number">9</span>;
+        <span class="kw">unsafe </span>{ SectionIdx::new_unchecked(col_idx_u8) }
+    }
+
+    <span class="attr">#[inline(always)]
+    </span><span class="kw">pub fn </span>inner_col_idx(<span class="self">self</span>) -&gt; InnerIdx {
+        <span class="self">self</span>.row_idx()
+    }
+
+    <span class="comment">// pub fn square_idx(self) -&gt; SectionIdx;
+    // pub fn inner_square_idx(self) -&gt; InnerIdx;
+</span>}
 </code></pre></div></section></main></body></html>

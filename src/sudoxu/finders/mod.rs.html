@@ -5,11 +5,15 @@
 <a href="#5" id="5">5</a>
 <a href="#6" id="6">6</a>
 <a href="#7" id="7">7</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! Finders are methods that identify when a cell is known within the board.
+<a href="#8" id="8">8</a>
+<a href="#9" id="9">9</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Identifying cells that are known
 
-</span><span class="attr">#[doc(hidden)]
-</span><span class="kw">pub mod </span>single_candidate;
+/// When a `Cell` only contains one candidate
+</span><span class="kw">mod </span>single_candidate;
+<span class="kw">pub use </span>single_candidate::<span class="kw-2">*</span>;
 
-<span class="attr">#[doc(hidden)]
-</span><span class="kw">pub mod </span>unique_candidate;
+<span class="doccomment">/// When within a row, column or square a `Cell` contains the only candidate for a certain `Num`
+</span><span class="kw">mod </span>unique_candidate;
+<span class="kw">pub use </span>unique_candidate::<span class="kw-2">*</span>;
 </code></pre></div></section></main></body></html>

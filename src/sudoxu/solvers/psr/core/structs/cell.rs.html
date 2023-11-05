@@ -192,10 +192,19 @@
 <a href="#192" id="192">192</a>
 <a href="#193" id="193">193</a>
 <a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::num::Num;
 
 <span class="kw">mod </span>fmt;
 <span class="kw">mod </span>update;
+<span class="attr">#[doc(inline)]
+</span><span class="kw">pub use </span>update::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// A cell within the grid.
 /// Holds information about what candidates the cell has, and if the value of the cell is known.
@@ -220,9 +229,12 @@
 ///     |      (9 8 7  6 5 4  3 2 1)
 ///     &quot;banned&quot; bits
 /// ```
-///
-/// Because of this representation, for visual clarity the unusual byte grouping of
-/// &quot;`0b000000_000_000_000_0`&quot; is commonly used for `u16`s relating to `Cells`.
+/// #### Byte Grouping
+/// Because of this representation, for visual clarity the &quot;unusual&quot; byte grouping of
+/// &quot;`0b000_000_000_0`&quot; is commonly used for `const u16`s relating to `Cells` within the documentation.
+/// As per the Rust language specification, this notation implies that the top 6 bits (the banned
+/// bits) are zeroed. When dicussing the banned bits the grouping &quot;`0b000000_000_000_000_0`&quot; is
+/// instead used.
 ///
 /// Errors relating to `Cell` representations (see below) are contained in the [`CandidateError`] enum.
 ///
@@ -233,15 +245,15 @@
 /// This means there must only be a single &quot;candidate bit&quot; set.
 /// ```
 /// // Valid u16 representation of a cell with value 9.
-/// assert!(Cell::new(0b000000_100_000_000_1).is_ok());
+/// assert!(Cell::new(0b100_000_000_1).is_ok());
 ///
 /// // Invalid u16 representation. Known bit is set but candidate bits for 5 and 6 are set.
 /// // This would represent a cell with a known value that is both 5 and 6.
-/// assert!(Cell::new(0b000000_000_110_000_1).is_err());
+/// assert!(Cell::new(0b000_110_000_1).is_err());
 ///
 /// // Invalid u16 representation. Known bit is set but there are no set candidate bits.
 /// // This would represent a cell with a known value, but no known value is set.
-/// assert!(Cell::new(0b000000_000_000_000_1).is_err());
+/// assert!(Cell::new(0b000_000_000_1).is_err());
 /// ```
 /// #### Candidates
 /// The following 9 bits are the &quot;candidate&quot; bits, these represent the possible candidate numbers
@@ -266,11 +278,14 @@
 /// We refer to a cell holding a known number as having a _value_ of said number,
 /// while a cell not holding a known number as having _candidates_:
 /// ```
-/// Cell(0b000000_100_000_000_1); // has &quot;value&quot; 9.
-/// Cell(0b000000_000_000_111_0); // has &quot;candidates&quot; 1, 2, and 3.
+/// Cell(0b100_000_000_1); // has &quot;value&quot; 9.
+/// Cell(0b000_000_111_0); // has &quot;candidates&quot; 1, 2, and 3.
 /// ```
 </span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>Cell(u16);
+
+<span class="doccomment">/// Inner value of a [`Cell`](Cell) representing all candidates being possible.
+</span><span class="kw">pub const </span>ALL_CANDIDATES: u16 = <span class="number">0b111_111_111_0</span>;
 
 <span class="doccomment">/// Errors relating to a Cell&#39;s candidates.
 </span><span class="attr">#[derive(Debug, PartialEq, Copy, Clone)]
@@ -284,21 +299,21 @@
     <span class="doccomment">/// Known bit is set but no candidates are set.
     ///
     /// ```
-    /// let cell = unsafe{ Cell::new_unchecked(0b000000_000_000_000_1) };
+    /// let cell = unsafe{ Cell::new_unchecked(0b000_000_000_1) };
     /// assert!(cell.to_u16() == 1);
     /// ```
     </span>KnownNoNum,
     <span class="doccomment">/// Known bit is set but multiple candidates are also set.
     /// ```
     /// let cell = unsafe{ Cell::new_unchecked(0b000000_111_000_000_1) };
-    /// assert!(cell.to_u16() % 2 == 1 &amp;&amp; !(cell.to_u16() &amp; 0b000000_111_111_111_0 - 1).is_power_of_two());
+    /// assert!(cell.to_u16() % 2 == 1 &amp;&amp; !(cell.to_u16() &amp; CELL_DEFAULT_U16 - 1).is_power_of_two());
     /// ```
     </span>KnownMultipleNum,
     <span class="doccomment">/// Cell contains no candidates/value.
     ///
     /// ```
     /// let cell = unsafe{ Cell::new_unchecked(0b000000_000_000_000_0) };
-    /// assert!(cell.to_u16() &amp; 0b000000_111_111_111_0 == 0);
+    /// assert!(cell.to_u16() &amp; CELL_DEFAULT_U16 == 0);
     /// ```
     </span>NoCandidates,
     <span class="doccomment">/// Cell has multiple unique candidates within its [Sections](super::section::Section).
@@ -312,9 +327,8 @@
 
 <span class="kw">impl </span>Default <span class="kw">for </span>Cell {
     <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(<span class="number">0b000000_111_111_111_0</span>)
-        <span class="comment">//            987 654 321
-    </span>}
+        <span class="self">Self</span>(ALL_CANDIDATES)
+    }
 }
 
 <span class="doccomment">/// Base Implementations
@@ -382,7 +396,7 @@
     /// The caller guarantees that this form of a `Cell` is only used within such cases
     /// and is never returned or used as an actual `Cell`.
     </span><span class="attr">#[inline(always)]
-    </span><span class="kw">pub unsafe fn </span>zerod() -&gt; Cell {
+    </span><span class="kw">pub unsafe fn </span>zeroed() -&gt; Cell {
         Cell::new_unchecked(<span class="number">0_u16</span>)
     }
 }

@@ -8,14 +8,32 @@
 <a href="#8" id="8">8</a>
 <a href="#9" id="9">9</a>
 <a href="#10" id="10">10</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::{cell::CandidateError, idx::GridIdx};
+<a href="#11" id="11">11</a>
+<a href="#12" id="12">12</a>
+<a href="#13" id="13">13</a>
+<a href="#14" id="14">14</a>
+<a href="#15" id="15">15</a>
+<a href="#16" id="16">16</a>
+<a href="#17" id="17">17</a>
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::{cell::CellMask, filter::Filter, idx::GridIdx};
 
 <span class="kw">use </span><span class="kw">super</span>::Grid;
 
 <span class="kw">impl </span>Grid {
-    <span class="doccomment">/// Update the neighbours (all remaining `Cell`s in each `Section`) once a `Cell` is known to have a value.
-    </span><span class="kw">pub fn </span>known_cell_update_neighbours(<span class="kw-2">&amp;mut </span><span class="self">self</span>, grid_idx: GridIdx) {
-        <span class="macro">todo!</span>()
+    <span class="doccomment">/// Remove candidates at the specified location.
+    </span><span class="kw">pub fn </span>apply_filter(<span class="kw-2">&amp;mut </span><span class="self">self</span>, filter: Filter) {
+        <span class="kw">let </span>cell = <span class="self">self</span>.get_cell_mut(filter.idx);
+        cell.remove_candidates(filter.mask);
+    }
+
+    <span class="doccomment">/// Remove candidates at the specified locations in the [Grid].
+    /// Applies [Grid::apply_filter](Grid::apply_filter) to each element in the given slice.
+    </span><span class="kw">pub fn </span>apply_filters(<span class="kw-2">&amp;mut </span><span class="self">self</span>, filters: <span class="kw-2">&amp;</span>[Filter]) {
+        <span class="kw">for </span>filter <span class="kw">in </span>filters {
+            <span class="self">self</span>.apply_filter(<span class="kw-2">*</span>filter);
+        }
     }
 }
 </code></pre></div></section></main></body></html>

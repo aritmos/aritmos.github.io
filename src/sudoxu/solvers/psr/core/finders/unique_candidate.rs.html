@@ -67,6 +67,7 @@
 <a href="#67" id="67">67</a>
 <a href="#68" id="68">68</a>
 <a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">super</span>::<span class="kw">super</span>::structs;
 <span class="kw">use </span>structs::{
     cell::{CandidateError, Cell},
@@ -81,7 +82,7 @@
     /// other cells within the `Section`.
     ///
     /// # Finder Method
-    /// See the [module level documentation](super) for more information.
+    /// See the [core module&#39;s documentation](super::super#finders) for more information.
     ///
     /// # Safety
     /// Does not check that the inner `Cell`s have correct representation.
@@ -91,8 +92,8 @@
         <span class="kw">let </span>candidate_cell = cells[inner_idx];
 
         <span class="comment">// OR all of the remaining candidates together
-        </span>cells[inner_idx] = <span class="kw">unsafe </span>{ Cell::zerod() };
-        <span class="kw">let </span>combined_candidates = cells.iter().fold(<span class="kw">unsafe </span>{ Cell::zerod() }, |a, b| <span class="kw">unsafe </span>{
+        </span>cells[inner_idx] = <span class="kw">unsafe </span>{ Cell::zeroed() };
+        <span class="kw">let </span>combined_candidates = cells.iter().fold(<span class="kw">unsafe </span>{ Cell::zeroed() }, |a, b| <span class="kw">unsafe </span>{
             Cell::new_unchecked(a.to_u16() | b.to_u16())
         });
 
@@ -113,12 +114,13 @@
 }
 
 <span class="kw">impl </span>Grid {
-    <span class="doccomment">/// Checks if a `Cell` contains a unique candidate within its three `Section`s.
+    <span class="doccomment">/// Checks if a [`Cell`] contains a unique candidate within its three [`Section`]s.
     ///
-    /// `sections`&#39; `[bool; 3]` represents selecting the `Cell`&#39;s row, column and box
-    /// respectively to be tested against for unique candidates.
+    /// # Finder Method
+    /// The function is a wrapper for a finder method.
+    /// See the [core module&#39;s documentation](super::super#finders) for more information.
     </span><span class="kw">pub fn </span>unique_candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, grid_idx: GridIdx) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Num&gt;, CandidateError&gt; {
-        <span class="kw">let </span>sections = <span class="self">self</span>.sections(grid_idx);
+        <span class="kw">let </span>sections = <span class="self">self</span>.get_sections(grid_idx);
         <span class="kw">let </span>inner_idxs = grid_idx.inner_idxs();
 
         <span class="kw">let </span><span class="kw-2">mut </span>result = <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);

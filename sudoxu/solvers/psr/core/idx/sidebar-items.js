@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["Idx"],"trait":["IntoIdx","TryIntoIdx"],"type":["AreaIdx","GridIdx","InnerIdx","SectionIdx"]};

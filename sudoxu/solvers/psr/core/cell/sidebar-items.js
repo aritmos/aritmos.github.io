@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ALL_CANDIDATES"],"enum":["CandidateError"],"struct":["Cell","CellMask"]};

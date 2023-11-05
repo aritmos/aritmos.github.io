@@ -131,13 +131,13 @@
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>to_char() {
-        <span class="kw">let </span>cell = Cell::new(<span class="number">0b0001000000001</span>).unwrap();
+        <span class="kw">let </span>cell = Cell::new(<span class="number">0b100_000_000_1</span>).unwrap();
         <span class="macro">assert_eq!</span>(char::from(cell), <span class="string">&#39;9&#39;</span>);
     }
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>byte_conversion() {
-        <span class="kw">let </span>c = Cell::new(<span class="number">0b0000001000000001</span>).unwrap();
+        <span class="kw">let </span>c = Cell::new(<span class="number">0b100_000_000_1</span>).unwrap();
         <span class="kw">let </span>b = u8::from(c);
         <span class="macro">assert_eq!</span>(b, <span class="string">b&#39;9&#39;</span>);
     }

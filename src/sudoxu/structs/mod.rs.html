@@ -15,21 +15,41 @@
 <a href="#15" id="15">15</a>
 <a href="#16" id="16">16</a>
 <a href="#17" id="17">17</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! Structs representing various parts of a sudoku grid, along with helper types.
-
-/// The cells in a sudoku grid.
+<a href="#18" id="18">18</a>
+<a href="#19" id="19">19</a>
+<a href="#20" id="20">20</a>
+<a href="#21" id="21">21</a>
+<a href="#22" id="22">22</a>
+<a href="#23" id="23">23</a>
+<a href="#24" id="24">24</a>
+<a href="#25" id="25">25</a>
+<a href="#26" id="26">26</a>
+<a href="#27" id="27">27</a>
+</pre></div><pre class="rust"><code><span class="doccomment">/// Representation of cells in the sudoku grid
 </span><span class="kw">pub mod </span>cell;
+<span class="kw">pub use </span>cell::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// the sudoku grid
+<span class="doccomment">/// Representation of the sudoku grid
 </span><span class="kw">pub mod </span>grid;
+<span class="kw">pub use </span>grid::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// safe indexing into comptime known arrays
+<span class="doccomment">/// Bounded unsigned integers used to index into other structs and collections
 </span><span class="kw">pub mod </span>idx;
+<span class="kw">pub use </span>idx::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// the known value within a cell. `1 &lt;= N &lt;= 9`.
+<span class="doccomment">/// Structs for the &quot;line&quot; related medium sudoku techniques
+</span><span class="kw">pub mod </span>lines;
+<span class="kw">pub use </span>lines::<span class="kw-2">*</span>;
+
+<span class="doccomment">/// Representation of the 1..=9 numbers that serve as known values in cells
 </span><span class="kw">pub mod </span>num;
+<span class="kw">pub use </span>num::<span class="kw-2">*</span>;
 
-<span class="doccomment">/// A row, column, or box within the grid.
-/// Internally a `[Cell; 9]`
+<span class="doccomment">///collection of [Cell; 9]
 </span><span class="kw">pub mod </span>section;
+<span class="kw">pub use </span>section::<span class="kw-2">*</span>;
+
+<span class="doccomment">/// Filters used to remove candidates from Cells
+</span><span class="kw">pub mod </span>filter;
+<span class="kw">pub use </span>filter::<span class="kw-2">*</span>;
 </code></pre></div></section></main></body></html>

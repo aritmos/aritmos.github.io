@@ -62,68 +62,74 @@
 <a href="#62" id="62">62</a>
 <a href="#63" id="63">63</a>
 <a href="#64" id="64">64</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span><span class="kw">crate</span>::structs::{
-    cell::{CandidateError, Cell},
-    grid::Grid,
-    idx::{GridIdx, InnerIdx},
-    num::Num,
-    section::{Section, SectionInfo, SectionKind::<span class="kw-2">*</span>},
-};
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+</pre></div><pre class="rust"><code><span class="attr">#![allow(unused)]
+</span><span class="kw">use </span><span class="kw">crate</span>::structs::<span class="kw-2">*</span>;
 
-<span class="kw">impl </span>Section {
-    <span class="doccomment">/// Finds if the `Cell` at `inner_idx` contains a candidate found in no
-    /// other cells within the `Section`.
-    /// # Safety:
-    /// Does not check that the inner `Cell`s have correct representation.
-    /// Incorrect `Cell` representations will lead to undefined behaviour.
-    </span><span class="kw">pub fn </span>unique_candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, inner_idx: InnerIdx) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Num&gt;, CandidateError&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>cells = <span class="self">self</span>.cells;
-        <span class="kw">let </span>candidate_cell = cells[inner_idx];
+<span class="doccomment">/// Inner index within a `Section`
+</span><span class="kw">type </span>InnerIdx = Idx&lt;<span class="number">9</span>&gt;;
 
-        <span class="comment">// OR all of the remaining candidates together
-        </span>cells[inner_idx] = <span class="kw">unsafe </span>{ Cell::zerod() };
-        <span class="kw">let </span>combined_candidates = cells.iter().fold(<span class="kw">unsafe </span>{ Cell::zerod() }, |a, b| <span class="kw">unsafe </span>{
-            Cell::new_unchecked(a.to_u16() | b.to_u16())
-        });
+<span class="doccomment">/// Unique Candidate:
+/// When within a `Section`, a specific `Cell` contains the only candidate for a certain `Num`.
+</span><span class="kw">impl</span>&lt;<span class="kw">const </span>K: SectionKind&gt; Section&lt;K&gt; {
+    <span class="kw">fn </span>unique_candidate(<span class="self">self</span>, inner_idx: InnerIdx) -&gt; CellResult {
+        <span class="kw">let </span>(candidate_cell, remaining_cells) = {
+            <span class="kw">let </span><span class="kw-2">mut </span>cells = <span class="self">self</span>.cells;
+            <span class="kw">let </span>cell = cells[inner_idx];
+            cells[inner_idx] = <span class="kw">unsafe </span>{ Cell::zero() };
+            (cell, cells)
+        };
+        <span class="kw">let </span>combined_candidates = remaining_cells
+            .iter()
+            .fold(<span class="kw">unsafe </span>{ Cell::zero() }, |a, b| a | <span class="kw-2">*</span>b);
 
-        <span class="kw">let </span>unique_candidates_u16 =
-            <span class="comment">// Find bits set in candidate_cell but not in combined_candidates.
-            </span>(candidate_cell.to_u16() &amp; !combined_candidates.to_u16());
+        <span class="kw">let </span>sole_candidates = ((candidate_cell ^ combined_candidates) &amp; candidate_cell).to_u16();
 
-        <span class="kw">match </span>unique_candidates_u16.count_ones() {
+        <span class="kw">match </span>sole_candidates.count_ones() {
             <span class="number">0 </span>=&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
             <span class="number">1 </span>=&gt; {
-                <span class="kw">let </span>n = unique_candidates_u16.ilog2() <span class="kw">as </span>u8;
+                <span class="kw">let </span>n = sole_candidates.ilog2() <span class="kw">as </span>u8;
                 <span class="kw">let </span>num = <span class="kw">unsafe </span>{ Num::new_unchecked(n) };
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(num))
             }
-            <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(CandidateError::MultipleUniqueCandidates),
+            <span class="number">2</span>.. =&gt; <span class="prelude-val">Err</span>(CellError::MultipleSoleCandidates),
         }
     }
 }
 
 <span class="kw">impl </span>Grid {
-    <span class="doccomment">/// Checks if a `Cell` contains a unique candidate within its three `Section`s.
-    ///
-    /// `sections`&#39; `[bool; 3]` represents selecting the `Cell`&#39;s row, column and box
-    /// respectively to be tested against for unique candidates.
-    </span><span class="kw">pub fn </span>unique_candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, grid_idx: GridIdx) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;Num&gt;, CandidateError&gt; {
-        <span class="kw">let </span>sections = <span class="self">self</span>.sections(grid_idx);
-        <span class="kw">let </span>inner_idxs = grid_idx.inner_idxs();
+    <span class="doccomment">/// Finds if a `Cell` contains a unique candidate when compared against its neighbours in a
+    /// grid. i.e. apply `Cell::unique_candidate` within each `Section` containing the `Cell` and
+    /// combine the results.
+    </span><span class="kw">pub fn </span>unique_candidate(<span class="kw-2">&amp;</span><span class="self">self</span>, idx: GridIdx) -&gt; CellResult {
+        <span class="macro">todo!</span>(<span class="string">&quot;rewrite to remove compliment indices&quot;</span>);
+        <span class="comment">/*
+        let cell = self.get(idx);
 
-        <span class="kw">let </span><span class="kw-2">mut </span>result = <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>);
-
-        <span class="kw">for </span>(section, inner_idx) <span class="kw">in </span>sections.into_iter().zip(inner_idxs) {
-            <span class="kw">let </span>section_result = section.unique_candidate(inner_idx);
-            <span class="kw">match </span>(result, section_result) {
-                (<span class="kw">_</span>, <span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>)) =&gt; (),
-                (<span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>), <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="kw">_</span>))) =&gt; result = section_result,
-                (<span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(a)), <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(b))) <span class="kw">if </span>a == b =&gt; (),
-                <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(CandidateError::MultipleUniqueCandidates),
-            }
-        }
-
-        result
-    }
+        Grid::compliment_indices(idx)
+            // Compliment cells for each section
+            .map(|idxs| self.get_cells(idxs))
+            // unique candidate result for each section
+            .map(|comp_cells| cell.unique_candidate(&amp;comp_cells))
+            // Fold the results of each section&#39;s unique_candidate results into one
+            // TODO: how to properly deal with sections returning multiple errors
+            // CURRENT IMPL: returns first error it encounters in the order: row, col, square.
+            .into_iter()
+            .fold(Ok(None), |x, y| match (x, y) {
+                (Err(e), _) | (_, Err(e)) =&gt; Err(e),
+                (Ok(None), Ok(None)) =&gt; Ok(None),
+                (Ok(Some(a)), Ok(None)) | (Ok(None), Ok(Some(a))) =&gt; Ok(Some(a)),
+                (Ok(Some(a)), Ok(Some(b))) =&gt; {
+                    if a == b {
+                        Ok(Some(a))
+                    } else {
+                        Err(CellError::MultipleSoleCandidates)
+                    }
+                }
+            })
+        */
+    </span>}
 }
 </code></pre></div></section></main></body></html>
