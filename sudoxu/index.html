@@ -1,5 +1,145 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Sudoxu"><title>sudoxu - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-47e7ab555ef2818a.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="sudoxu" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.0-nightly (1e746d774 2023-09-07)" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-f194925aa375ae96.css" data-theme-dark-css="dark-1dd4d1ce031e15de.css" data-theme-ayu-css="ayu-49e58d069f567085.css" ><script src="../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-ef3a2de404864b0b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-f194925aa375ae96.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-1dd4d1ce031e15de.css"><link rel="stylesheet" href="../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../sudoxu/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../sudoxu/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Crate sudoxu</a></h2><div class="sidebar-elems"><ul class="block"><li class="version">Version 0.1.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">sudoxu</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/sudoxu/lib.rs.html#1-28">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="sudoxu"><a href="#sudoxu">Sudoxu</a></h2>
-<p>A Rust library for sudoku solving.</p>
-<p>For parity with the codebase, always clone the repo and locally compile the documentation using
-<code>rustup</code> or <code>cargo doc</code>.</p>
-<h3 id="project-structure"><a href="#project-structure">Project Structure</a></h3></div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="board/index.html" title="mod sudoxu::board">board</a></div><div class="desc docblock-short">I/O representation of sudoku boards.</div></li><li><div class="item-name"><a class="mod" href="prelude/index.html" title="mod sudoxu::prelude">prelude</a></div><div class="desc docblock-short">Prelude module, used for easy access to solvers and functions.</div></li><li><div class="item-name"><a class="mod" href="solver/index.html" title="mod sudoxu::solver">solver</a></div><div class="desc docblock-short">The root <code>Solver</code> trait, implemented for all types which can solve sudokus.</div></li><li><div class="item-name"><a class="mod" href="solvers/index.html" title="mod sudoxu::solvers">solvers</a></div><div class="desc docblock-short">Sudoku solver categories and utilities.</div></li></ul><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.time.html" title="macro sudoxu::time">time</a></div><div class="desc docblock-short">Prints how long the inner block took to execute.</div></li></ul></section></div></main></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Sudoxu"><title>sudoxu - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Bold-a2c9cd1067f8b328.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-47e7ab555ef2818a.css" id="mainThemeStyle"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="sudoxu" data-themes="" data-resource-suffix="" data-rustdoc-version="1.74.0-nightly (1e746d774 2023-09-07)" data-channel="nightly" data-search-js="search-5d3eaacf19ebf04f.js" data-settings-js="settings-de11bff964e9d4e5.js" data-settings-css="settings-8c76f75bfb6bd192.css" data-theme-light-css="light-f194925aa375ae96.css" data-theme-dark-css="dark-1dd4d1ce031e15de.css" data-theme-ayu-css="ayu-49e58d069f567085.css" ><script src="../static.files/storage-db41da1a38ea3cb8.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-ef3a2de404864b0b.js"></script><noscript><link rel="stylesheet" media="(prefers-color-scheme:light)" href="../static.files/light-f194925aa375ae96.css"><link rel="stylesheet" media="(prefers-color-scheme:dark)" href="../static.files/dark-1dd4d1ce031e15de.css"><link rel="stylesheet" href="../static.files/noscript-cffde32267a19fd6.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="logo-container" href="../sudoxu/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2></h2></nav><nav class="sidebar"><a class="logo-container" href="../sudoxu/index.html"><img class="rust-logo" src="../static.files/rust-logo-151179464ae7ed46.svg" alt="logo"></a><h2 class="location"><a href="#">Crate sudoxu</a></h2><div class="sidebar-elems"><ul class="block"><li class="version">Version 0.1.0</li><li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li></ul></section></div></nav><main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" title="help" tabindex="-1"><a href="../help.html">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">sudoxu</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/sudoxu/lib.rs.html#1-161">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><h2 id="sudoxu"><a href="#sudoxu">Sudoxu</a></h2>
+<p>A Rust library (and eventually also a binary) for sudoku solving.</p>
+<h5 id="sync-documentation"><a href="#sync-documentation"><code>!Sync</code> Documentation.</a></h5>
+<p>The version of this project’s documentation hosted in GitHub pages may not always align with
+the state of the <a href="https://github.com/aritmos/sudoxu">main repo</a>.
+For parity with the codebase, compile the documentation from source (requires Rust toolchain)</p>
+<div class="example-wrap"><pre class="language-txt"><code>&gt; git clone --depth 1 https://github.com/aritmos/sudoxu.git
+&gt; cd sudoxu
+&gt; cargo doc
+&gt; $BROWSER target/docs/sudoxu/index.html
+</code></pre></div><h2 id="quick-start"><a href="#quick-start">Quick Start</a></h2>
+<p>The project is still early in production and not fully functional. Defined solvers may be
+tested using the following code:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>sudoku::prelude::<span class="kw-2">*</span>;
+
+<span class="comment">// Create a board using an `&amp;str` within the library&#39;s database (Easy #01 unsolved).
+</span><span class="kw">let </span>board = Board::try_from(boards::E01_U).unwrap();
+
+<span class="comment">// Solve the board using the [`btr::Backtracker`] solver and print the result.
+</span>solve_board&lt;btr::Backtracker&gt;(board).print();</code></pre></div>
+<h2 id="introduction"><a href="#introduction">Introduction</a></h2>
+<p>The current state of the crate defines the <a href="board/struct.Board.html" title="struct sudoxu::board::Board"><code>Board</code></a> struct and
+<a href="solver/trait.Solver.html" title="trait sudoxu::solver::Solver"><code>Solver</code></a> trait. The <a href="board/struct.Board.html" title="struct sudoxu::board::Board"><code>Board</code></a> acts the interface between I/O
+and the Solvers. Solvers are types which implement the <a href="solver/trait.Solver.html" title="trait sudoxu::solver::Solver"><code>Solver</code></a> trait.</p>
+<div class="example-wrap"><pre class="language-text"><code>  I/O                 sudoku          
+┌──────┐     ┌───────────────────────┐
+│ &amp;str │ &lt;-&gt; │ Board &lt;-&gt; impl Solver │
+└──────┘     └───────────────────────┘
+</code></pre></div>
+<p>Solvers have two key distinctions between one another:</p>
+<ol>
+<li>The fundamental way in which they solve a sudoku — i.e. the techniques.</li>
+<li>How they solve the sudoku — i.e. the strategy.</li>
+</ol>
+<p>In some cases a given group of sudoku techniques might only have a single strategy. However in
+more complex cases (such as how humans solve sudokus) there can be multiple strategies.</p>
+<p>A technique or group of techniques define a <code>Solver</code> “category”.
+Solver categories are the submodules of the <a href="solvers/index.html" title="mod sudoxu::solvers"><code>solvers</code></a> module.
+Each category can have multiple inner Solvers, which can utilize different strategies to solve
+the sudoku using the same techniques. In these cases, the common techniques are stored within a
+<code>core</code> module, acting as a library for all of the solvers of that category.</p>
+<h3 id="solver-categories"><a href="#solver-categories">Solver Categories</a></h3><h5 id="backtracking-btr"><a href="#backtracking-btr">Backtracking (<code>btr</code>)</a></h5>
+<p>The standard backtracking solution. This category contains a
+single solver.</p>
+<h5 id="phase-space-reduction-psr"><a href="#phase-space-reduction-psr">Phase Space Reduction (<code>psr</code>)</a></h5>
+<p>The inception of this crate.</p>
+<p>A computerized version of a human’s approach to sudoku solving. Removes candidates from
+the board using traditional techniques such as single candidates, unique candidates or
+candidate projections. Unlike humans however, it begins by filling the entire board with
+all pencilmarks {1,…,9} (except the starting cells), and removing the pencilmarks step-by-step.
+These solvers therefore reduce the phase space of allowed boards until only a signle allowed
+state is left, the solution.</p>
+<p>There are many strategies for solving sudokus using traditional techniques, ranging from an
+amateur’s approach to an expert’s. Implementations of <a href="solvers/psr/index.html" title="mod sudoxu::solvers::psr"><code>psr</code></a> solvers use a range
+of techniques; normally an increasing set ordered by technique difficulty or computational
+complexity.</p>
+<p>Current Capabilities/Techniques
+(See the <a href="solvers/psr/index.html" title="mod sudoxu::solvers::psr">module level documentation</a> for more information):</p>
+<ul>
+<li>Easy:
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Single Candidate</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Unique Candidate</li>
+</ul>
+</li>
+<li>Medium:
+<ul>
+<li><input disabled="" type="checkbox" checked=""/>
+Candidate Lines</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Double Pairs</li>
+<li><input disabled="" type="checkbox" checked=""/>
+Multiple Lines</li>
+</ul>
+</li>
+<li>Advanced:
+<ul>
+<li><input disabled="" type="checkbox"/>
+Naked Pairs/Triples</li>
+<li><input disabled="" type="checkbox"/>
+Hidden Pairs/Triples</li>
+</ul>
+</li>
+<li>Master:
+<ul>
+<li><input disabled="" type="checkbox"/>
+X-Wing</li>
+<li><input disabled="" type="checkbox"/>
+Swordfish</li>
+<li><input disabled="" type="checkbox"/>
+Forcing Chains</li>
+<li><input disabled="" type="checkbox"/>
+Nishio</li>
+</ul>
+</li>
+</ul>
+<p>These solvers were created with the eventual goal of being able to guide a human into solving a
+sudoku puzzle. Possibly by taking in a partially completed board and outlining the steps
+towards solving the puzzle.</p>
+<h2 id="project-goals"><a href="#project-goals">Project Goals</a></h2>
+<p>This project is an primarily an exploration, and secondly an actual crate. It originally began
+as the implementation for the core functionality of the <a href="solvers/psr/index.html" title="mod sudoxu::solvers::psr"><code>psr</code></a> solvers,
+aimed at exploring how to efficiently translate human techniques into a computational
+algorithm.</p>
+<p>The <a href="solvers/psr/core/index.html" title="mod sudoxu::solvers::psr::core">core psr functionality</a> was invisioned to be efficient and performant.
+The implementations focus on a lack of heap allocation (although some minimal
+allocation has been incorporated to make parts of the code cleaner), strong emphasis on bit
+manipulation, SIMD, and vendor intrinsics. The latter of these are still barely a part of the
+current implementations, however they play stronger roles in some of the currently unimplemented
+(but already fully devised) Advanced+ techniques.</p>
+<p>Now the project has expanded beyond the <a href="solvers/psr/index.html" title="mod sudoxu::solvers::psr"><code>psr</code></a> to allow for multiple solver
+categories, and is focused on eventually becoming a full blown TUI application for sudoku
+solving.</p>
+<h3 id="project-roadmap"><a href="#project-roadmap">Project Roadmap</a></h3>
+<p>The essential implementation ordering is as outlined below, although I commonly work on what I
+feel like doing. Work towards a major version can occur before a prior major version is
+finished.</p>
+<ul>
+<li><code>v0.2.0</code> (Core lib)
+<ul>
+<li>Expand the core library with a wide range of solving techniques and multiple solver
+categories.</li>
+<li>Document modules and implementations</li>
+</ul>
+</li>
+<li><code>v0.3.0</code> (Fully functional lib)
+<ul>
+<li>Ability to run multiple solvers using a range of strategies</li>
+<li>Automatic testing of solvers and performance evaluation</li>
+<li>Multiple <a href="solver/trait.Solver.html" title="trait sudoxu::solver::Solver"><code>Solver</code></a> types, including solvers that log their solution,
+show steps, or outline their limitations.</li>
+</ul>
+</li>
+<li><code>v0.4.0</code> (TUI Binary)
+<ul>
+<li>Implement a terminal UI interface, with the ability to load sudokus from a multiple
+sources</li>
+<li>Show (certain) solvers solving the sudoku in real time</li>
+</ul>
+</li>
+</ul>
+</div></details><h2 id="modules" class="small-section-header"><a href="#modules">Modules</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="board/index.html" title="mod sudoxu::board">board</a></div><div class="desc docblock-short">I/O representation of sudoku boards.</div></li><li><div class="item-name"><a class="mod" href="prelude/index.html" title="mod sudoxu::prelude">prelude</a></div><div class="desc docblock-short">Prelude module, used for easy access to solvers and functions.</div></li><li><div class="item-name"><a class="mod" href="solver/index.html" title="mod sudoxu::solver">solver</a></div><div class="desc docblock-short">The root <code>Solver</code> trait, implemented for all types which can solve sudokus.</div></li><li><div class="item-name"><a class="mod" href="solvers/index.html" title="mod sudoxu::solvers">solvers</a></div><div class="desc docblock-short">Sudoku solver categories and utilities.</div></li></ul><h2 id="macros" class="small-section-header"><a href="#macros">Macros</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.time.html" title="macro sudoxu::time">time</a></div><div class="desc docblock-short">Prints how long the inner block took to execute.</div></li></ul></section></div></main></body></html>

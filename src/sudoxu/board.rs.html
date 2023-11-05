@@ -86,6 +86,7 @@
 <a href="#86" id="86">86</a>
 <a href="#87" id="87">87</a>
 <a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! I/O representation of sudoku boards.
 
 </span><span class="kw">use </span>std::fmt::{Debug, Display};
@@ -95,6 +96,7 @@
 </span><span class="kw">pub struct </span>Board(<span class="kw">pub </span>[u8; <span class="number">81</span>]);
 
 <span class="doccomment">/// [`Board`] related errors.
+</span><span class="attr">#[derive(Debug)]
 </span><span class="kw">pub enum </span>BoardError {
     <span class="doccomment">/// Error parsing an `&amp;str` into a [`Board`].
     </span>FromStrError,
